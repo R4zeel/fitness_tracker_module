@@ -70,18 +70,19 @@ class Running(Training):
     CALORIES_MEAN_SPEED_SHIFT = 1.79
 
     def get_spent_calories(self):
-        return ((
+        return (
+            (
                 self.CALORIES_MEAN_SPEED_MULTIPLIER
                 * self.get_mean_speed()
                 + self.CALORIES_MEAN_SPEED_SHIFT
-                )
-                * self.weight
-                / self.M_IN_KM
-                * (
+            )
+            * self.weight
+            / self.M_IN_KM
+            * (
                 self.duration
                 * self.MIN_IN_H
-                )
-                )
+            )
+        )
 
 
 class SportsWalking(Training):
@@ -89,7 +90,6 @@ class SportsWalking(Training):
 
     WEIGHT_MULTIPLIER_1 = 0.035
     WEIGHT_MULTIPLIER_2 = 0.029
-    training_type = 'SportsWalking'
     KMH_INTO_MS = 0.278
     CM_INTO_METERS = 100
 
@@ -149,29 +149,33 @@ class Swimming(Training):
         self.count_pool = count_pool
 
     def get_mean_speed(self):
-        return (self.length_pool
-                * self.count_pool
-                / self.M_IN_KM
-                / self.duration
-                )
+        return (
+            self.length_pool
+            * self.count_pool
+            / self.M_IN_KM
+            / self.duration
+        )
 
     def get_spent_calories(self):
-        return ((
+        return (
+            (
                 self.get_mean_speed()
                 + self.MEAN_SPEED_MULTIPLIER
-                )
-                * self.MEAN_SPEED_MULTIPLIER_2
-                * self.weight
-                * self.duration
-                )
+            )
+            * self.MEAN_SPEED_MULTIPLIER_2
+            * self.weight
+            * self.duration
+        )
 
 
 def read_package(workout_type: str, data: list[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
 
-    workout_types = {'SWM': Swimming,
-                     'WLK': SportsWalking,
-                     'RUN': Running}
+    workout_types: dict[str: object] = {
+        'SWM': Swimming,
+        'WLK': SportsWalking,
+        'RUN': Running
+    }
     return workout_types[workout_type](*data)
 
 
